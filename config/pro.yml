@@ -276,7 +276,7 @@ rules:
                   "query": {
                     "match": {
                       "doc.metricKey.keys.serviceName": {
-                        "query": "onebox-int-avet-ticketing-connector-service",
+                        "query": "int-avet-ticketing-connector-service",
                         "type": "phrase"
                       }
                     }
@@ -335,7 +335,7 @@ rules:
                 "query": {
                   "match": {
                     "doc.metricKey.keys.serviceName": {
-                      "query": "onebox-int-avet-ticketing-connector-service",
+                      "query": "int-avet-ticketing-connector-service",
                       "type": "phrase"
                     }
                   }

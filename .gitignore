@@ -1,8 +1,7 @@
-.idea
+**.idea
 jacaranda.log
 jacaranda
 jacaranda.linux
 jacaranda.exe
 *.gcfg
 git.properties
-.idea/workspace.xml
