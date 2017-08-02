@@ -29,7 +29,7 @@ func InfoController(w http.ResponseWriter, request *http.Request) {
 
 	// Set json response struct
 	var inforesponse InfoResponseType
-	inforesponse.Version = "release/4.0.8"
+	inforesponse.Version = "master"
 	// TODO fill the version, release and git branch
 	infojson, _ := json.Marshal(inforesponse)
 
