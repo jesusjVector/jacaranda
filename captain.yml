@@ -1,0 +1,8 @@
+sys-jacaranda:
+  pre:
+    - echo "Building sys-jacaranda Docker Image"
+  post:
+    - echo "Finished building sys-jacaranda Docker Image"
+  build: app/Dockerfile
+  image: docker-registry.oneboxtickets.com/oneboxtm/sys-jacaranda
+
