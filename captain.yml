@@ -3,6 +3,6 @@ sys-jacaranda:
     - echo "Building sys-jacaranda Docker Image"
   post:
     - echo "Finished building sys-jacaranda Docker Image"
-  build: app/Dockerfile
+  build: Dockerfile
   image: docker-registry.oneboxtickets.com/oneboxtm/sys-jacaranda
 
