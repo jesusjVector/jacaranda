@@ -17,7 +17,7 @@ rules:
     min_items: 0
     elk_index: metric/couchbaseDocument
     elk_timeout: 60000
-    elk_host: pro.consolemonit1.oneboxtickets.com
+    elk_host: sys-elastic-monit-pro-01.oneboxtickets.com
     elk_filter: '{
     "query": {
       "filtered": {
@@ -81,7 +81,7 @@ rules:
     min_items: 100
     elk_index: metric/couchbaseDocument
     elk_timeout: 60000
-    elk_host: pro.consolemonit1.oneboxtickets.com
+    elk_host: sys-elastic-monit-pro-01.oneboxtickets.com
     elk_filter: '{
       "query": {
         "filtered": {
@@ -130,7 +130,7 @@ rules:
     min_items: 0
     elk_index: metric/couchbaseDocument
     elk_timeout: 60000
-    elk_host: pro.consolemonit1.oneboxtickets.com
+    elk_host: sys-elastic-monit-pro-01.oneboxtickets.com
     elk_filter: '{
     "query": {
       "filtered": {
@@ -187,7 +187,7 @@ rules:
     min_items: 1
     elk_index: metric/couchbaseDocument
     elk_timeout: 60000
-    elk_host: pro.consolemonit1.oneboxtickets.com
+    elk_host: sys-elastic-monit-pro-01.oneboxtickets.com
     elk_filter: '{
     "query": {
       "filtered": {
@@ -259,7 +259,7 @@ rules:
     min_items: 10
     elk_index: metric/couchbaseDocument
     elk_timeout: 60000
-    elk_host: pro.consolemonit1.oneboxtickets.com
+    elk_host: sys-elastic-monit-pro-01.oneboxtickets.com
     elk_filter: '{
       "query": {
         "filtered": {
@@ -318,7 +318,7 @@ rules:
     min_items: 0
     elk_index: metric/couchbaseDocument
     elk_timeout: 60000
-    elk_host: pro.consolemonit1.oneboxtickets.com
+    elk_host: sys-elastic-monit-pro-01.oneboxtickets.com
     elk_filter: '{
     "query": {
       "filtered": {
