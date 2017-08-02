@@ -1,0 +1,440 @@
+server_port: 8001
+log_file: /opt/jacaranda/logs/jacaranda.log
+log_format: "%{color}%{time:0102 15:04:05.000} %{level:.4s} %{id:03x} ▶ %{shortfunc}: %{color:reset} %{message}"
+telegram_bot_token: 182636765:AAFHu8FhAK1KPgad3hfqov8JNgqIZvWzLF0
+pod_doublecheck_url: http://10.1.2.173:30920/
+rules:
+  -
+    alert_name: no-sales
+    is_multivalue: false
+    alert_status: enabled
+    telegram_chat_id: -114003924
+    threshold: 1
+    raise_condition: below
+    time_window_utc: 6-20
+    time_frame_sec: 600
+    check_time_sec: 300
+    min_items: 0
+    elk_index: metric/couchbaseDocument
+    elk_timeout: 60000
+    elk_host: pro.consolemonit1.oneboxtickets.com
+    elk_filter: '{
+    "query": {
+      "filtered": {
+        "query": {
+          "query_string": {
+            "query": "*",
+            "analyze_wildcard": true
+          }
+        },
+        "filter": {
+          "bool": {
+            "must": [
+              {
+                "bool": {
+                  "should": [
+                    {
+                      "term": {
+                        "doc.metricKey.keys.method": "/onebox-rest2/rest/order/simpleCommitOrder"
+                      }
+                    },
+                    {
+                      "term": {
+                        "doc.metricKey.keys.method": "/onebox-rest2/rest/order/commitOrder"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "range": {
+                  "doc.timestamp": {
+                    "gte": $gte,
+                    "lte": $lte
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "size": 0,
+    "aggs": {
+      "count": {
+        "sum": {
+          "field": "doc.count"
+        }
+      }
+    }
+  }'
+  -
+    alert_name: response-time
+    is_multivalue: false
+    alert_status: enabled
+    telegram_chat_id: -114003924
+    threshold: 400
+    raise_condition: above
+    time_window_utc: 6-20
+    time_frame_sec: 120
+    check_time_sec: 30
+    min_items: 100
+    elk_index: metric/couchbaseDocument
+    elk_timeout: 60000
+    elk_host: pro.consolemonit1.oneboxtickets.com
+    elk_filter: '{
+      "query": {
+        "filtered": {
+          "query": {
+            "query_string": {
+              "query": "*",
+              "analyze_wildcard": true
+            }
+          },
+          "filter": {
+            "bool": {
+              "must": [
+                {
+                  "range": {
+                    "doc.timestamp": {
+                      "gte": $gte,
+                      "lte": $lte
+                    }
+                  }
+                }
+              ],
+              "must_not": []
+            }
+          }
+        }
+      },
+      "size": 0,
+      "aggs": {
+        "count": {
+          "avg": {
+            "field": "doc.duration"
+          }
+        }
+      }
+    }'
+  -
+    alert_name: no-traffic
+    is_multivalue: false
+    alert_status: enabled
+    telegram_chat_id: -114003924
+    threshold: 1
+    raise_condition: below
+    time_window_utc: 6-20
+    time_frame_sec: 120
+    check_time_sec: 60
+    min_items: 0
+    elk_index: metric/couchbaseDocument
+    elk_timeout: 60000
+    elk_host: pro.consolemonit1.oneboxtickets.com
+    elk_filter: '{
+    "query": {
+      "filtered": {
+        "query": {
+          "query_string": {
+            "query": "*",
+            "analyze_wildcard": true
+          }
+        },
+        "filter": {
+          "bool": {
+            "must": [
+              {
+                "query": {
+                  "query_string": {
+                    "analyze_wildcard": true,
+                    "query": "*"
+                  }
+                }
+              },
+              {
+                "range": {
+                  "doc.timestamp": {
+                    "gte": $gte,
+                    "lte": $lte
+                  }
+                }
+              }
+            ],
+            "must_not": []
+          }
+        }
+      }
+    },
+    "size": 0,
+    "aggs": {
+      "count": {
+        "sum": {
+          "field": "doc.count"
+        }
+      }
+    }
+  }'
+  -
+    alert_name:  operations-errors
+    is_multivalue: false
+    alert_status: enabled
+    telegram_chat_id: -114003924
+    threshold: 100
+    raise_condition: above
+    time_window_utc: 6-20
+    time_frame_sec: 300
+    check_time_sec: 300
+    min_items: 1
+    elk_index: metric/couchbaseDocument
+    elk_timeout: 60000
+    elk_host: pro.consolemonit1.oneboxtickets.com
+    elk_filter: '{
+    "query": {
+      "filtered": {
+        "query": {
+          "query_string": {
+            "analyze_wildcard": true,
+            "query": "*"
+          }
+        },
+        "filter": {
+          "bool": {
+            "must": [
+              {
+                "bool": {
+                  "must_not": [
+                    {
+                      "term": {
+                        "doc.metricKey.keys.status": ""
+                      }
+                    }
+                  ],
+                  "should": [
+                    {
+                      "term": {
+                        "doc.metricKey.keys.method": "/onebox-rest2/rest/order/simpleCommitOrder"
+                      }
+                    },
+                    {
+                      "term": {
+                        "doc.metricKey.keys.method": "/onebox-rest2/rest/order/commitOrder"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "range": {
+                  "doc.timestamp": {
+                    "gte": $gte,
+                    "lte": $lte
+                  }
+                }
+              }
+            ],
+            "must_not": []
+          }
+        }
+      }
+    },
+    "size": 0,
+    "aggs": {
+      "count": {
+        "sum": {
+          "field": "doc.count"
+        }
+      }
+    }
+  }'
+  -
+    alert_name: response-time-int
+    is_multivalue: false
+    alert_status: disabled
+    telegram_chat_id: -114003924
+    threshold: 2000
+    raise_condition: above
+    time_window_utc: 7-20
+    time_frame_sec: 120
+    check_time_sec: 30
+    min_items: 10
+    elk_index: metric/couchbaseDocument
+    elk_timeout: 60000
+    elk_host: pro.consolemonit1.oneboxtickets.com
+    elk_filter: '{
+      "query": {
+        "filtered": {
+          "query": {
+            "query_string": {
+              "query": "*",
+              "analyze_wildcard": true
+            }
+          },
+          "filter": {
+            "bool": {
+              "must": [
+                {
+                  "query": {
+                    "match": {
+                      "doc.metricKey.keys.serviceName": {
+                        "query": "onebox-int-avet-ticketing-connector-service",
+                        "type": "phrase"
+                      }
+                    }
+                  }
+                },
+                {
+                  "range": {
+                    "doc.timestamp": {
+                      "gte": $gte,
+                      "lte": $lte
+                    }
+                  }
+                }
+              ],
+              "must_not": []
+            }
+          }
+        }
+      },
+      "size": 0,
+      "aggs": {
+        "count": {
+          "avg": {
+            "field": "doc.duration"
+          }
+        }
+      }
+    }'
+  -
+    alert_name: no-traffic-int
+    is_multivalue: false
+    alert_status: disabled
+    telegram_chat_id: -114003924
+    threshold: 1
+    raise_condition: below
+    time_window_utc: 6-20
+    time_frame_sec: 300
+    check_time_sec: 60
+    min_items: 0
+    elk_index: metric/couchbaseDocument
+    elk_timeout: 60000
+    elk_host: pro.consolemonit1.oneboxtickets.com
+    elk_filter: '{
+    "query": {
+      "filtered": {
+        "query": {
+          "query_string": {
+            "query": "*",
+            "analyze_wildcard": true
+          }
+        },
+        "filter": {
+          "bool": {
+            "must": [
+              {
+                "query": {
+                  "match": {
+                    "doc.metricKey.keys.serviceName": {
+                      "query": "onebox-int-avet-ticketing-connector-service",
+                      "type": "phrase"
+                    }
+                  }
+                }
+              },
+              {
+                "query": {
+                  "query_string": {
+                    "analyze_wildcard": true,
+                    "query": "*"
+                  }
+                }
+              },
+              {
+                "range": {
+                  "doc.timestamp": {
+                    "gte": $gte,
+                    "lte": $lte
+                  }
+                }
+              }
+            ],
+            "must_not": []
+          }
+        }
+      }
+    },
+  "size": 0,
+    "aggs": {
+      "count": {
+        "sum": {
+          "field": "doc.count"
+        }
+      }
+    }
+  }'
+  -
+    alert_name: response-time-detail
+    is_multivalue: true
+    alert_status: enabled
+    telegram_chat_id: -114003924
+    threshold: 400
+    raise_condition: above
+    time_window_utc: 7-23
+    time_frame_sec: 300
+    check_time_sec: 30
+    min_items: 100
+    elk_index: metric/couchbaseDocument
+    elk_timeout: 30000
+    elk_host: sys-elastic-monit-pro-01.oneboxtickets.com
+    elk_filter: '{
+    "query": {
+      "filtered": {
+        "query": {
+          "query_string": {
+            "query": "*",
+            "analyze_wildcard": true
+          }
+        },
+        "filter": {
+          "bool": {
+            "must": [
+              {
+                "query": {
+                  "query_string": {
+                    "analyze_wildcard": true,
+                    "query": "*"
+                  }
+                }
+              },
+              {
+                "range": {
+                  "doc.timestamp": {
+                    "gte": $gte,
+                    "lte": $lte
+                  }
+                }
+              }
+            ],
+            "must_not": []
+          }
+        }
+      }
+    },
+    "size": 0,
+    "aggs": {
+      "TOP_3_SLOW_INSTANCES": {
+        "terms": {
+          "field": "doc.metricKey.keys.instanceID",
+          "order" : { "AVG_RSP_TIME" : "desc" },
+          "size": 3
+        },
+        "aggs": {
+          "AVG_RSP_TIME": {
+            "avg": {
+              "field": "doc.duration"
+            }
+          }
+        }
+      }
+    }
+    }'

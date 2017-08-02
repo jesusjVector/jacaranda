@@ -11,7 +11,7 @@ RUN mkdir /jacaranda/bin
 RUN mkdir /jacaranda/cfg
 RUN mkdir /jacaranda/logs
 
-ADD *.yml /jacaranda/cfg/
+ADD config/*.yml /jacaranda/cfg/
 
 ENV CONF_PATH /jacaranda/cfg
 ENV ENV pro
